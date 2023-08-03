@@ -1,174 +1,139 @@
 {% from "macros.j2" import render_navigation %}
 
 {% block style %}
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ static_url }}ginza.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ static_url }}assets/coffee.css">
 {% endblock %}
 
-{%- macro render_item(subject) -%}
-  <div id="item-{{ subject.id }}" class="item {{ subject.type|title }}">
-    {% if subject.cover and subject.cover.src %}
-      <a class="item-image js-cover" data-src="{{ subject.cover.src|thumbnail('m') }}" href="{{ linkify(subject.url) }}"></a>
-    {% elif subject.image %}
-      <a class="item-image js-cover" data-src="{{ subject.image|thumbnail('m') }}" href="{{ linkify(subject.url) }}"></a>
-    {% else %}
-      <a class="item-image" href="{{ linkify(subject.url) }}"></a>
-    {% endif %}
-    <a class="item-main" href="{{ linkify(subject.url) }}">
-      <div class="item-meta">
-        {% if subject.duration %}
-          <span class="item-label">{{ subject.duration }}</span>
-        {% endif %}
-        <time datetime="{{ subject.published_at|xmldatetime }}">{{ subject.published_at.strftime('%b %d, %Y') }}</time>
-      </div>
-      <h3>{{ subject.title }}</h3>
-      {%- if subject.subtitle %}
-        <div class="item-subtitle">{{ subject.subtitle }}</div>
-      {%- endif -%}
+{% block body %}
+{% set podcast = site.podcast %}
+<div class="site">
+  <div class="site_head">
+    <a class="site_logo" href="{{ linkify('/') }}">
+      {% if podcast and podcast.image %}
+        <img src="{{ podcast.image|thumbnail('sm') }}" alt="{{ podcast.title }} logo">
+      {% elif site.logo %}
+        <img src="{{ site.logo.src|thumbnail('sm') }}" alt="{{ site.name }} logo">
+      {% endif %}
+      <strong>{{ site.name }}</strong>
     </a>
-  </div>
-{%- endmacro -%}
-
-{% macro render_head(site) %}
-<div class="head">
-  <div class="inner">
-    <div class="head_logo">
-      <a href="{{ linkify('/') }}">
-        {% if site.logo %}
-          <img src="{{ site.logo.src|thumbnail('ss') }}" alt="{{ site.name }}"/>
-        {% endif %}
-        <span>{{ site.name }}</span>
-      </a>
-    </div>
-    <div class="head_subscribe">
-      {% if features.algolia %}
-        <a href="#" class="js-search" data-id="{{ site.algolia_id }}" data-key="{{ site.algolia_key }}">
+    {% if site.primary_links %}
+      <div class="site_nav">
+        <label for="nav-links" aria-label="Navigation">
+          <i class="icon icon-menu"></i>
+        </label>
+        <input type="checkbox" id="nav-links" />
+        <nav>
+          {% for nav in site.primary_links %}
+            <a href="{{ nav.url }}" {% if nav.blank %} target="_blank"{% endif %}>{{ nav.title }}</a>
+          {% endfor %}
+        </nav>
+        <a href="#" class="site_search js-search"
+          {% if features.algolia %}data-id="{{ site.algolia_id }}" data-key="{{ site.algolia_key }}"{% endif %}>
           <i class="icon icon-search" aria-label="Search"></i>
         </a>
-      {% endif %}
-      {% if features.post %}
-        <button class="js-subscribe">Subscribe</button>
+      </div>
+    {% endif %}
+  </div>
+  {% if page.type == 'audio_list' %}
+    <div class="site_cover">
+      {% if site.cover %}
+        <img src="{{ site.cover.src|thumbnail('l') }}" alt="{{ site.name }} banner cover">
+      {% else %}
+        <img src="{{ static_url }}assets/banner.png" alt="{{ site.name }} banner cover">
       {% endif %}
     </div>
-  </div>
-</div>
-{% endmacro %}
-
-{% macro render_site_info(site) %}
-  <div class="info_main">
-    <h1 class="info_title"><a class="h-card" rel="me" href="{{ linkify('/') }}">{{ site.name }}</a></h1>
-    {% if site.summary %}
-      <h2 class="info_subtitle">{{ site.summary }}</h2>
-    {% endif %}
-    <nav class="info_nav">
-      {% for nav in site.primary_links -%}
-        <a href="{{ nav.url }}"{% if nav.blank %} target="_blank"{% endif %}>{{ nav.title }}</a>
-      {% endfor %}
-    </nav>
-  </div>
-{% endmacro %}
-
-{% macro render_podcast_info(site) %}
-  {% set podcast = site.podcast %}
-  {% if podcast.image %}
-    <a class="info_logo" href="{{ linkify('/') }}">
-      <img src="{{ podcast.image|thumbnail('ss') }}" alt="{{ podcast.title }}">
-    </a>
-  {% endif %}
-  <div class="info_main">
-    <h1 class="info_title"><a class="h-card" rel="me" href="{{ linkify('/') }}">{{ podcast.title }}</a></h1>
-    {% if podcast.subtitle %}
-      <h2 class="info_subtitle">{{ podcast.subtitle }}</h2>
-    {% endif %}
-    <nav class="info_nav">
-      <a href="/feed/audio.xml">RSS</a>
-      {% for nav in podcast.links %}
-        <a href="{{ nav.url }}"{% if nav.blank %} target="_blank"{% endif %}>{{ nav.title }}</a>
-      {% endfor %}
-    </nav>
-  </div>
-{% endmacro %}
-
-{% macro render_tag_info(tag) %}
-<div class="info_main">
-  <h1 class="info_title"><a class="h-card" rel="me" href="{{ linkify(tag.url) }}">{{ tag.name }}</a></h1>
-  {% if tag.summary %}
-    <h2 class="info_subtitle">{{ tag.summary }}</h2>
-  {% endif %}
-  <nav class="info_nav">
-    {% for nav in site.primary_links -%}
-      <a href="{{ nav.url }}"{% if nav.blank %} target="_blank"{% endif %}>{{ nav.title }}</a>
-    {% endfor %}
-  </nav>
-</div>
-{% endmacro %}
-
-
-{% macro render_author_info(author) %}
-{% if author.avatar %}
-  <a class="info_logo" href="{{ linkify('/') }}">
-    <img class="avatar" src="{{ author.avatar|thumbnail('ss') }}" alt="{{ author.name }}">
-  </a>
-{% endif %}
-<div class="info_main">
-  <h1 class="info_title"><a class="h-card" rel="me" href="{{ linkify(author.url) }}">{{ author.name }}</a></h1>
-  <nav class="info_nav">
-    {% for nav in site.primary_links -%}
-      <a href="{{ nav.url }}"{% if nav.blank %} target="_blank"{% endif %}>{{ nav.title }}</a>
-    {% endfor %}
-  </nav>
-</div>
-{% endmacro %}
-
-
-{% block body %}
-  {% set cover = site.cover %}
-  {% if page.type == 'tag' %}
-    {% set tag = page.topic %}
-    {% if tag.cover and tag.cover.src %}
-      {% set cover = tag.cover %}
+    {% if podcast and podcast.links %}
+      <div class="site_podcasts">
+        {%- for nav in podcast.links -%}
+          <a href="{{ nav.url }}"{% if nav.blank %} target="_blank"{% endif %}>
+            <i class="icon icon-{{ nav.icon }}" aria-aria="{{ nav.title }}"></i>
+          </a>
+        {%- endfor -%}
+      </div>
     {% endif %}
   {% endif %}
-  <div {% if cover -%}
-    class="head-cover js-cover" data-src="{{ cover.src|thumbnail }}"
-  {%- else -%}
-    class="head-cover"
-  {%- endif %}>
-    {{ render_head(site) }}
-    <div class="info _{{ page.type }}">
-      <div class="inner">
-        {% if page.type == 'audio_list' and site.podcast %}
-          {{ render_podcast_info(site) }}
-        {% elif page.type == 'tag' %}
-          {{ render_tag_info(page.topic) }}
-        {% elif page.type == 'author' %}
-          {{ render_author_info(page.topic) }}
-        {% elif page.type == 'lang' %}
-          {% set info = page.topic %}
-          <div class="info_main">
-            <h1 class="info_title">{{ info.name }}</h1>
-            <nav class="info_nav">
-              {% for nav in site.primary_links -%}
-                <a href="{{ nav.url }}"{% if nav.blank %} target="_blank"{% endif %}>{{ nav.title }}</a>
-              {% endfor %}
-            </nav>
-          </div>
-        {% else %}
-          {{ render_site_info(site) }}
+</div>
+
+{% if page.type == 'author' %}
+<div class="list-head">
+{% set user = page.topic %}
+<div class="entry-authors list-head_inner">
+  <div class="p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    {% if user.avatar %}
+      <a href="{{ linkify(user.url) }}" class="author_image">
+        <img class="u-photo" itemprop="image" src="{{ user.avatar|thumbnail('ss') }}" alt="{{ user.name }}">
+      </a>
+    {% endif %}
+    <div class="author_main">
+      <div class="author_meta">
+        <strong class="p-name" itemprop="name">
+          <a href="{{ linkify(user.url) }}" class="u-url">{{ user.name }}</a>
+        </strong>
+        {% if user.metadata.twitter %}
+          <a href="https://twitter.com/{{ user.metadata.twitter }}">
+            <i class="icon icon-twitter" aria-label="Twitter"></i>
+          </a>
         {% endif %}
       </div>
+      {% if user.bio %}
+        <div class="author_bio" itemprop="description">{{ user.bio }}</div>
+      {% endif %}
     </div>
   </div>
-  <div class="main">
-    <div class="inner">
-      <div class="items">
-        {% for subject in page.items %}
-          {{ render_item(subject) }}
-        {% endfor %}
+</div>
+</div>
+{% elif page.type == 'tag' %}
+{% set tag = page.topic %}
+<div class="list-head">
+  <div class="list-head_inner item_info">
+    <h2>{{ tag.title }}</h2>
+    {% if tag.summary %}
+      <h3>{{ tag.summary }}</h3>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% for item in page.items %}
+  <div class="item">
+    {% if item.image %}
+      <a href="{{ linkify(item.url)}}" class="item_image">
+        <img src="{{ item.image|thumbnail('sm') }}" alt="{{ item.title }} image">
+      </a>
+    {% endif %}
+    <div class="item_wrap">
+      <div class="item_meta">
+        {% if item.type == 'audio' %}
+          <div class="item_label">
+            {% if item.season and item.episode %}
+              <span>S{{ item.season }}E{{ item.episode }}</span>
+            {% elif item.episode %}
+              <span>E{{ item.episode }}</span>
+            {% endif %}
+            <span class="item_duration">{{ item.duration }}</span>
+          </div>
+        {% endif %}
+        <div class="item_time">
+          <time datetime="{{ item.published_at|xmldatetime }}">{{ item.published_at.strftime('%Y-%m-%d') }}</time>
+        </div>
       </div>
-      {{ render_navigation(site, page) }}
+      <div class="item_info">
+        <h2><a href="{{ linkify(item.url) }}">{{ item.title }}</a></h2>
+        {% if item.subtitle %}
+          <h3>{{ item.subtitle }}</h3>
+        {% endif %}
+      </div>
+      <div class="item_summary">{{ item.summary|escape }}</div>
     </div>
   </div>
-  {% include "_snippets/site_foot.j2" %}
-  {% include "_snippets/brand_foot.j2" %}
+{% endfor %}
+
+{{ render_navigation(site, page) }}
+
+<div class="foot">
+  <p>Powered by <a href="https://typlog.com/?utm_source={{ site.slug }}&utm_medium=theme-coffee">Typlog</a>.</p>
+</div>
 {% endblock %}
