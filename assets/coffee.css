@@ -43,7 +43,8 @@ a:hover {
 }
 
 .site_logo {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   text-decoration: none;
   color: inherit;
 }
