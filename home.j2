@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block body %}
-{% set podcast = site.podcast %}
 <div class="site">
   <div class="site_head">
     <a class="site_logo" href="{{ linkify('/') }}">
@@ -41,6 +40,7 @@
       <img src="{{ static_url }}assets/banner.png" alt="{{ site.name }} banner cover">
     {% endif %}
   </div>
+  {% set podcast = site.podcast %}
   {% if podcast and podcast.links %}
     <div class="site_podcasts">
       {%- for nav in podcast.links -%}
@@ -48,6 +48,12 @@
           <i class="icon icon-{{ nav.icon }}" aria-aria="{{ nav.title }}"></i>
         </a>
       {%- endfor -%}
+    </div>
+  {% endif %}
+  {% set socials = site.socials %}
+  {% if socials %}
+    <div class="site_socials">
+      {{ render_social_icons(site) }}
     </div>
   {% endif %}
 </div>
