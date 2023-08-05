@@ -1,9 +1,6 @@
 {% from "macros.j2" import render_social_icons, render_subject_content %}
 
 {% block style %}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ static_url }}assets/coffee.css">
 {% endblock %}
 
@@ -55,71 +52,40 @@
   {% endif %}
 </div>
 
-{% set items = query.latest_subjects('audio', contains=['content']) %}
+{% set items = query.latest_subjects('post', contains=['content']) %}
 {% if items %}
-  {% set latest = items[0] %}
-  <article class="h-entry item featured">
-    {% if latest.image %}
-      <a href="{{ linkify(latest.url)}}" class="item_image">
-        <img src="{{ latest.image|thumbnail('sm') }}" alt="{{ latest.title }} image">
-      </a>
-    {% endif %}
-    <div class="item_wrap">
-      <div class="item_meta">
-        <div class="item_label">
-          {% if latest.season and latest.episode %}
-            <span>S{{ latest.season }}E{{ latest.episode }}</span>
-          {% elif latest.episode %}
-            <span>E{{ latest.episode }}</span>
-          {% endif %}
-          <span class="item_duration">{{ latest.duration }}</span>
-        </div>
-        <div class="item_time">
-          <time datetime="{{ latest.published_at|xmldatetime }}">{{ latest.published_at.strftime('%Y-%m-%d') }}</time>
-        </div>
-      </div>
-      <div class="item_info">
-        <h2 class="p-name"><a href="{{ linkify(latest.url) }}">{{ latest.title }}</a></h2>
-        {% if latest.subtitle %}
-          <h3 class="p-summary">{{ latest.subtitle }}</h3>
+  {% for item in items %}
+    {% if item.lang == 'zh' %}
+      <div class="item">
+        {% if item.image %}
+          <a href="{{ linkify(item.url)}}" class="item_image">
+            <img src="{{ item.image|thumbnail('sm') }}" alt="{{ item.title }} image">
+          </a>
         {% endif %}
-      </div>
-      <div class="item_summary e-content js-content {{ latest.format }}">
-        {{ render_subject_content(site, latest) }}
-      </div>
-    </div>
-  </article>
-
-  {% for item in items[1:] %}
-    <div class="item">
-      {% if item.image %}
-        <a href="{{ linkify(item.url)}}" class="item_image">
-          <img src="{{ item.image|thumbnail('sm') }}" alt="{{ item.title }} image">
-        </a>
-      {% endif %}
-      <div class="item_wrap">
-        <div class="item_meta">
-          <div class="item_label">
-            {% if item.season and item.episode %}
-              <span>S{{ item.season }}E{{ item.episode }}</span>
-            {% elif item.episode %}
-              <span>E{{ item.episode }}</span>
+        <div class="item_wrap">
+          <div class="item_meta">
+            <div class="item_label">
+              {% if item.season and item.episode %}
+                <span>S{{ item.season }}E{{ item.episode }}</span>
+              {% elif item.episode %}
+                <span>E{{ item.episode }}</span>
+              {% endif %}
+              <span class="item_duration">{{ item.duration }}</span>
+            </div>
+            <div class="item_time">
+              <time datetime="{{ item.published_at|xmldatetime }}">{{ item.published_at.strftime('%Y-%m-%d') }}</time>
+            </div>
+          </div>
+          <div class="item_info">
+            <h2><a href="{{ linkify(item.url) }}">{{ item.title }}</a></h2>
+            {% if item.subtitle %}
+              <h3>{{ item.subtitle }}</h3>
             {% endif %}
-            <span class="item_duration">{{ item.duration }}</span>
           </div>
-          <div class="item_time">
-            <time datetime="{{ item.published_at|xmldatetime }}">{{ item.published_at.strftime('%Y-%m-%d') }}</time>
-          </div>
+          <div class="item_summary">{{ item.summary|escape }}</div>
         </div>
-        <div class="item_info">
-          <h2><a href="{{ linkify(item.url) }}">{{ item.title }}</a></h2>
-          {% if item.subtitle %}
-            <h3>{{ item.subtitle }}</h3>
-          {% endif %}
-        </div>
-        <div class="item_summary">{{ item.summary|escape }}</div>
       </div>
-    </div>
+    {% endif %}
   {% endfor %}
   {% if site.audios_url %}
     <div class="navigation">
@@ -128,7 +94,5 @@
   {% endif %}
 {% endif %}
 
-<div class="foot">
-  <p>Powered by <a href="https://typlog.com/?utm_source={{ site.slug }}&utm_medium=theme-coffee">Typlog</a>.</p>
-</div>
+ {% include "./_foot.j2" %}
 {% endblock %}
