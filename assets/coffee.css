@@ -5,9 +5,6 @@
 }
 
 body {
-  /* width: 100%; */
-  flex-direction: column;
-  display: flex;
   color: var(--text-hex);
   background-color: #F8F7F6;
   font: 18px/1.42 var(--sys-sans), var(--cjk-sans), sans-serif;
@@ -32,7 +29,6 @@ a:hover {
 
 .site {
   margin-bottom: 60px;
-  flex: 1;
 }
 
 .site_head {
@@ -170,7 +166,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   max-width: 864px;
-  margin: 0 auto 20px;
+  margin: 0 20px 20px;
   background: #fff;
   border-radius: 8px;
   padding: 40px;
@@ -303,9 +299,6 @@ a:hover {
 }
 
 .foot {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
   font-size: 13px;
   padding: 40px;
   text-align: center;
@@ -336,7 +329,7 @@ a:hover {
 }
 
 .entry-main>.e-content {
-  padding: 60px 0;
+  padding: 60px 20px 0;
 }
 
 .entry-main .e-content>* {
