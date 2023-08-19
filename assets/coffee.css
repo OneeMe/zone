@@ -75,20 +75,17 @@ a:hover {
   opacity: 0;
 }
 
-.site_nav a {
+.nav_title {
   color: var(--text-hex);
   font-size: 14px;
   opacity: 0.86;
   text-decoration: none;
   white-space: nowrap;
+  margin-right: 20px;
 }
 
 .site_nav nav>a:hover {
   text-decoration: underline;
-}
-
-.site_nav a+a {
-  margin-left: 20px;
 }
 
 .site_cover {

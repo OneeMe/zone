@@ -2,12 +2,13 @@
 
 {% include "./_head.j2" %}
 {% block style %}
-<link rel="stylesheet" href="{{ static_url }}assets/coffee.css">
+{% include "./_style.j2" %}
 {% endblock %}
 
 {% block body %}
 <div class="site">
   {% include "./_nav.j2" %}
+
   <div class="site_cover">
     {% if site.cover %}
       <img src="{{ site.cover.src|thumbnail('l') }}" alt="{{ site.name }} banner cover">

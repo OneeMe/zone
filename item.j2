@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
 {% if page.type != 'audio' %}
 <link rel="stylesheet" href="{{ static_url }}assets/content.css">
-<link rel="stylesheet" href="{{ static_url }}assets/coffee.css">
+{% include "./_style.j2" %}
 {% endif%}
 {% endblock %}
 

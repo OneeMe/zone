@@ -46,9 +46,8 @@ function replaceZhToEn() {
   });
 }
 
-// run after html loaded
-window.onload = function () {
 
+document.addEventListener('DOMContentLoaded', function () {
   const lang = getLang();
   // set lang to html
   document.documentElement.lang = lang;
@@ -56,7 +55,4 @@ window.onload = function () {
   if (lang === "en") {
     replaceZhToEn();
   }
-};
-
-
-
+});
