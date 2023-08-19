@@ -9,6 +9,9 @@ function getI18nMap() {
       ["XR 世界导览", "XR World Weekly"],
       ["文章", "Article"]
     ],
+    "js-subscribe": [
+      ["订阅", "Subscribe"],
+    ],
   };
 }
 

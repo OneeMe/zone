@@ -24,12 +24,7 @@
       {%- endfor -%}
     </div>
   {% endif %}
-  {% set socials = site.socials %}
-  {% if socials %}
-    <div class="site_socials">
-      {{ render_social_icons(site) }}
-    </div>
-  {% endif %}
+  {% include "./_social.j2" %}
 </div>
 
 {% set items = query.latest_subjects('post', contains=['content']) %}
