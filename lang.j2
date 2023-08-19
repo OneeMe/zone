@@ -34,7 +34,7 @@
 {% set items = query.latest_subjects('post', contains=['content']) %}
 {% if items %}
   {% for item in items %}
-    {% if item.lang == 'zh' %}
+    {% if item.lang == page.lang %}
       <div class="item">
         {% if item.image %}
           <a href="{{ linkify(item.url)}}" class="item_image">

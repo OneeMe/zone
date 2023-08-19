@@ -1,5 +1,7 @@
 {% from "macros.j2" import render_navigation %}
 
+{% include "./_head.j2" %}
+
 {% block style %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,33 +12,7 @@
 {% block body %}
 {% set podcast = site.podcast %}
 <div class="site">
-  <div class="site_head">
-    <a class="site_logo" href="{{ linkify('/') }}">
-      {% if podcast and podcast.image %}
-        <img src="{{ podcast.image|thumbnail('sm') }}" alt="{{ podcast.title }} logo">
-      {% elif site.logo %}
-        <img src="{{ site.logo.src|thumbnail('sm') }}" alt="{{ site.name }} logo">
-      {% endif %}
-      <strong>{{ site.name }}</strong>
-    </a>
-    {% if site.primary_links %}
-      <div class="site_nav">
-        <label for="nav-links" aria-label="Navigation">
-          <i class="icon icon-menu"></i>
-        </label>
-        <input type="checkbox" id="nav-links" />
-        <nav>
-          {% for nav in site.primary_links %}
-            <a href="{{ nav.url }}" {% if nav.blank %} target="_blank"{% endif %}>{{ nav.title }}</a>
-          {% endfor %}
-        </nav>
-        <a href="#" class="site_search js-search"
-          {% if features.algolia %}data-id="{{ site.algolia_id }}" data-key="{{ site.algolia_key }}"{% endif %}>
-          <i class="icon icon-search" aria-label="Search"></i>
-        </a>
-      </div>
-    {% endif %}
-  </div>
+  {% include "./_nav.j2" %}
   {% if page.type == 'audio_list' %}
     <div class="site_cover">
       {% if site.cover %}
