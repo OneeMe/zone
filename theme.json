@@ -9,6 +9,12 @@
     "blog",
     "podcast"
   ],
+  "templates": [
+    "home.j2",
+    "item.j2",
+    "list.j2",
+    "lang.j2"
+  ],
   "images": [
     "https://github.com/OneeMe/zone/blob/master/assets/theme.png?raw=true"
   ]
