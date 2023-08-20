@@ -54,6 +54,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const lang = getLang();
   // set lang to html
   document.documentElement.lang = lang;
+  // redirect in root
+  if (document.location.pathname === "/") {
+    const langOfBrowser = navigator.language;
+    if (langOfBrowser.includes("en")) {
+      window.location.href = "/en/";
+    } else if (langOfBrowser.includes("zh")) {
+      window.location.href = "/zh/";
+    } else {
+      // do nothing
+    }
+  }
   // replace all zh to en if needed
   if (lang === "en") {
     replaceZhToEn();
