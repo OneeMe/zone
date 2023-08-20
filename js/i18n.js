@@ -59,10 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const langOfBrowser = navigator.language;
     if (langOfBrowser.includes("en")) {
       window.location.href = "/en/";
-    } else if (langOfBrowser.includes("zh")) {
-      window.location.href = "/zh/";
-    } else {
-      // do nothing
     }
   }
   // replace all zh to en if needed
