@@ -9,8 +9,14 @@
 <div class="site">
   {% include "./_nav.j2" %}
   <div class="site_cover">
-    {% if site.cover %}
-      <img src="{{ site.cover.src|thumbnail('l') }}" alt="{{ site.name }} banner cover">
+    {% if page.lang == 'en'%}
+      <a href="https://letsvisionos24.swiftgg.team/en/" target="_target">
+        <img src="https://images.xreality.zone/dd898e7b170e577abd0abd21040ea3ea.png" alt="{{ site.name }} banner cover">
+      </a>
+    {% else %}
+      <a href="https://letsvisionos24.swiftgg.team/" target="_target">
+        <img src="https://images.xreality.zone/0f42d0edca80fee944c42dc3de745b97.png" alt="{{ site.name }} banner cover">
+      </a>
     {% endif %}
   </div>
   {% set podcast = site.podcast %}
